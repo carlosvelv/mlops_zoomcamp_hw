@@ -136,6 +136,13 @@ def train_best_model(
         RMSE: {rmse:.2f}
         
         """
+
+        create_markdown_artifact(
+        key="report",
+        markdown=markdown_rmse_report,
+        description="Report",
+    )
+
     return None
 
 
