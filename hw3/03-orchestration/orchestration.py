@@ -12,6 +12,21 @@ from prefect import flow, task
 from prefect.artifacts import create_markdown_artifact
 from datetime import date 
 
+from prefect_email import EmailServerCredentials, email_send_message
+
+@flow
+def example_email_send_message_flow(email_addresses):
+    email_server_credentials = EmailServerCredentials.load("email-test")
+    for email_address in email_addresses:
+        subject = email_send_message.with_options(name=f"email {email_address}").submit(
+            email_server_credentials=email_server_credentials,
+            subject="Example Flow Notification using Gmail",
+            msg="This proves email_send_message works!",
+            email_to=email_address,
+        )
+
+example_email_send_message_flow(["test@zbock.com"])
+
 
 @task(retries=3, retry_delay_seconds=2)
 def read_data(filename: str) -> pd.DataFrame:
